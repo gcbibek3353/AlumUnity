@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { updateUserInfo, getUserInfo } from '@/firebase/user.controller';
+import { toast } from 'sonner';
 
 const Profile = () => {
   const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with actual user ID once auth is implemented
@@ -84,9 +85,9 @@ const Profile = () => {
 
     const response = await updateUserInfo(userId, userInfo);
     if (response.success) {
-      alert('User information updated successfully!');
+      toast.success('User information updated successfully!');
     } else {
-      alert(`Failed to update user information: ${response.message}`);
+      toast.error(`Failed to update user information: ${response.message}`);
     }
   };
 
