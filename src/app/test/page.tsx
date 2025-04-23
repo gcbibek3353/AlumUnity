@@ -1,4 +1,5 @@
 "use client"
+import { Button } from '@/components/ui/button'
 import { createEvent, getAllEvents, getLatestThreeEvents } from '@/firebase/event.controller'
 import { createOpportunity, getAllOpportunities } from '@/firebase/oppertunities.controller'
 import { createOrremoveDownvoteForQuestions, createOrremoveDownvoteForReplies, createOrremoveUpvoteForQuestions, createOrremoveUpvoteForReplies, createQuestion, createReply } from '@/firebase/questions.controller'
@@ -67,7 +68,9 @@ const page = () => {
     }, [])
 
     return (
-        <div>test page </div>
+        <div>test page 
+                  <Button>Click me</Button>
+        </div>
     )
 }
 
