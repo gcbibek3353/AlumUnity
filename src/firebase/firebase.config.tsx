@@ -1,6 +1,9 @@
 "use client"
 import { initializeApp } from "firebase/app";
 import { createContext, useContext } from "react";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { saveUserAfterLogin } from "./user.controller";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,16 +16,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-interface FirebaseContextType {
-  // TODO : Testing for now, Update later
-  isUserLoggedIn: boolean;
-}
+export const auth = getAuth(app);
+export const firebasedb = getFirestore(app);
 
 const FirebaseContext = createContext<FirebaseContextType | undefined>(
   undefined
 );
-FirebaseContext.displayName = 'FirebaseContext';
 
 export const useFirebase = () => {
   const context = useContext(FirebaseContext);
@@ -34,8 +33,12 @@ export const useFirebase = () => {
 export const FirebaseProvider = ({ children }: { children: React.ReactNode }) => {
   const isUserLoggedIn = false; // TODO: Implement user authentication logic
 
+  
+
   return (
-    <FirebaseContext.Provider value={{ isUserLoggedIn }}>
+    <FirebaseContext.Provider value={{
+       isUserLoggedIn,
+     }}>
       {children}
     </FirebaseContext.Provider>
   )
