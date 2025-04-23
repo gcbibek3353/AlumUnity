@@ -1,9 +1,23 @@
 "use client"
 import { initializeApp } from "firebase/app";
-import { createContext, useContext } from "react";
-import { getAuth } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
+
 import { getFirestore } from "firebase/firestore";
 import { saveUserAfterLogin } from "./user.controller";
+import { toast } from "sonner";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  User,
+  setPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -18,6 +32,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const firebasedb = getFirestore(app);
+setPersistence(auth, browserSessionPersistence);
+
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
 
 const FirebaseContext = createContext<FirebaseContextType | undefined>(
   undefined
@@ -31,13 +49,85 @@ export const useFirebase = () => {
 };
 
 export const FirebaseProvider = ({ children }: { children: React.ReactNode }) => {
-  const isUserLoggedIn = false; // TODO: Implement user authentication logic
+  // TODO: Implement user authentication logic
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null); // type User from firebase/auth
+  const [authloading, setAuthloading] = useState(true);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedInUser(user);
+        setIsUserLoggedIn(true);
+      } else {
+        setIsUserLoggedIn(false);
+      }
+      setAuthloading(false);
+    });
+  });
+
+  const signUpWithEmail = async (email: string, password: string) => {
+    try {
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      toast.success(`Signed up as ${result.user.email}`);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+  const signInWithEmail = async (email: string, password: string) => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      toast.success(`Welcome back, ${result.user.email}`);
+    } catch (error: any) {
+      toast.error("Invalid email or password");
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      toast.success(`Signed in as ${result.user.displayName}`);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const signInWithGithub = async () => {
+    try {
+      const result = await signInWithPopup(auth, githubProvider);
+      toast.success(
+        `Signed in as ${result.user.displayName || result.user.email}`
+      );
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+      toast.success("Logged out");
+    } catch (error: any) {
+      toast.error("Failed to logout");
+    }
+  };
 
   
 
   return (
     <FirebaseContext.Provider value={{
        isUserLoggedIn,
+       loggedInUser,
+       signInWithEmail,
+       signUpWithEmail,
+       signInWithGithub,
+       signInWithGoogle,
+       logOut,
+       authloading,
      }}>
       {children}
     </FirebaseContext.Provider>

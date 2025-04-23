@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createOpportunity, getAllOpportunities } from "@/firebase/oppertunities.controller";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const Opportunities = () => {
   const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with userId from context once auth is implemented
@@ -42,7 +43,7 @@ const Opportunities = () => {
     const data = { ...opportunityData, postedBy: userId };
     const response = await createOpportunity(data);
     if (response.success) {
-      alert("Opportunity created successfully!");
+      toast.success("Opportunity created successfully!");
       fetchOpportunities(); // Refresh the list of opportunities
       setOpportunityData({ // Clear the form state
         title: "",
@@ -55,7 +56,7 @@ const Opportunities = () => {
       });
       setIsDialogOpen(false); // Close the dialog
     } else {
-      alert(`Failed to create opportunity: ${response.message}`);
+      toast.error(`Failed to create opportunity: ${response.message}`);
     }
   };
 
@@ -64,7 +65,7 @@ const Opportunities = () => {
     if (response.success) {
       setOpportunities(response.data);
     } else {
-      alert(`Failed to fetch opportunities: ${response.message}`);
+      toast.error(`Failed to fetch opportunities: ${response.message}`);
     }
   };
 
