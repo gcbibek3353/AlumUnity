@@ -26,7 +26,6 @@ export const createQuestion = async (question: CreateQuestionParams) => {
 
 export const getAllQuestions = async () => {
     // TODO : You need to populate the replies and user info before returning the questions
-    // TODO : You need to sort the questions based on the date
     // TODO : You need to sort the questions based on the upvotes and downvotes
 
     try {
