@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/UserAvatar'
 import { createEvent, getAllEvents, getLatestThreeEvents } from '@/firebase/event.controller'
 import { createOpportunity, getAllOpportunities } from '@/firebase/oppertunities.controller'
-import { createOrremoveDownvoteForQuestions, createOrremoveDownvoteForReplies, createOrremoveUpvoteForQuestions, createOrremoveUpvoteForReplies, createQuestion, createReply, getAllQuestions } from '@/firebase/questions.controller'
+import { createOrremoveDownvoteForQuestions, createOrremoveDownvoteForReplies, createOrremoveUpvoteForQuestions, createOrremoveUpvoteForReplies, createQuestion, createReply, getAllQuestions, getThreeQuestionsWithMostUpvotes } from '@/firebase/questions.controller'
 import { getUserInfo, saveUserAfterLogin, updateUserInfo } from '@/firebase/user.controller'
 import React, { use, useEffect } from 'react'
 // this is just a temporary test file to test the controller functions 
@@ -46,7 +46,7 @@ const page = () => {
 
             // await createQuestion({
             //     posted_by: "KqLD11exKhcThd5juthP",
-            //     question: "this is a test question",
+            //     question: "this is a what what what question?",
             //     date: "2023-10-10",
             // })
 
@@ -63,7 +63,8 @@ const page = () => {
             // await createOrremoveUpvoteForReplies("WMWcwomwbrbBkoR5Fx5I", "imgInmRjc0noGAw5CFBa");
             // await createOrremoveDownvoteForReplies("WMWcwomwbrbBkoR5Fx5I", "imgInmRjc0noGAw5CFBa");
 
-            const res = await getAllQuestions();
+            // const res = await getAllQuestions();
+            const res = await getThreeQuestionsWithMostUpvotes();
 
             console.log(res.questions);
 

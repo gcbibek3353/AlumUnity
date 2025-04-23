@@ -1,5 +1,6 @@
 'use client'
 
+import SideBar from '@/components/SideBar';
 import { useFirebase } from '@/firebase/firebase.config';
 import { useRouter } from 'next/navigation';
 import React, { ReactNode, useEffect } from 'react'
@@ -26,8 +27,8 @@ const layout = ({ children }: { children: ReactNode }) => {
 
   return (
     <div >
+      <SideBar />
       {children}
-        
   </div>
   )
 }

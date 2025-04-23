@@ -301,3 +301,31 @@ export const createOrremoveDownvoteForReplies = async (replyId: string, userId: 
         };
     }
 }
+
+export const getThreeQuestionsWithMostUpvotes = async () => {
+    // TODO : Need to populate the replies and user info before returning the questions
+    try {
+        // Reference to the questions collection in Firestore
+        const questionsRef = collection(firebasedb, 'questions');
+
+        // Fetch all questions from the Firestore collection
+        const snapshot = await getDocs(questionsRef);
+        const questions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Sort questions by upvotes in descending order and get the top 3
+        const sortedQuestions = questions.sort((a, b) => (b.upVotes || []).length - (a.upVotes || []).length).slice(0, 3);
+
+        // Return success response with the list of top 3 questions
+        return {
+            success: true,
+            message: "Top 3 questions fetched successfully",
+            questions: sortedQuestions,
+        };
+    } catch (error) {
+        // Handle errors and return failure response
+        return {
+            success: false,
+            message: `Failed to fetch top 3 questions: ${error.message}`,
+        };
+    }
+}
