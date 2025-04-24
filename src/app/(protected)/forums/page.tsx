@@ -10,12 +10,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createQuestion, getAllQuestions, createOrremoveUpvoteForQuestions, createOrremoveDownvoteForQuestions } from '@/firebase/questions.controller';
+import { getUserInfo } from '@/firebase/user.controller';
 
 const Forums = () => {
   const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with userId from context once auth is implemented
+  const [userMap, setUserMap] = useState<{ [userId: string]: string }>({});
+
 
   const [questionData, setQuestionData] = useState({
     question: '',
@@ -34,7 +38,7 @@ const Forums = () => {
     const data = { ...questionData, posted_by: userId };
     const response = await createQuestion(data);
     if (response.success) {
-      alert('Question created successfully!');
+      toast.success('Question created successfully!');
       fetchQuestions(); // Refresh the list of questions
       setQuestionData({ // Clear the form state
         question: '',
@@ -42,18 +46,54 @@ const Forums = () => {
       });
       setIsDialogOpen(false); // Close the dialog
     } else {
-      alert(`Failed to create question: ${response.message}`);
+      toast.error(`Failed to create question: ${response.message}`);
     }
   };
 
+  
+  //  const fetchQuestions = async () => {
+  //   const response = await getAllQuestions();
+  //   if (response.success) {
+  //     setQuestions(response.questions);
+  //   } else {
+  //     toast.error(`Failed to fetch questions: ${response.message}`);
+  //   }
+  // };
   const fetchQuestions = async () => {
     const response = await getAllQuestions();
+  
     if (response.success) {
-      setQuestions(response.questions);
+      const fetchedQuestions = response.questions;
+  
+      // Extract unique userIds
+      const userIds = [...new Set(fetchedQuestions.map((q: any) => q.posted_by))];
+  
+      // Fetch user info if not already cached
+      const userFetches = await Promise.all(userIds.map(async (id) => {
+        if (!userMap[id]) {
+          const user = await getUserInfo(id);
+          // console.log(user)
+          // console.log(user?.data?.name)
+          return { id, name: user?.data?.name || 'Unknown User' };
+        } else {
+          return { id, name: userMap[id] }; // Already cached
+        }
+      }));
+  
+      // Update userMap with new names
+      const updatedUserMap = { ...userMap };
+      userFetches.forEach(({ id, name }) => {
+        updatedUserMap[id] = name;
+      });
+  
+      setUserMap(updatedUserMap);
+      setQuestions(fetchedQuestions);
     } else {
-      alert(`Failed to fetch questions: ${response.message}`);
+      toast.error(`Failed to fetch questions: ${response.message}`);
     }
   };
+  
+
 
   const handleUpvote = async (questionId: string) => {
     const response = await createOrremoveUpvoteForQuestions(questionId, userId);
@@ -69,7 +109,7 @@ const Forums = () => {
     if (response.success) {
       fetchQuestions(); // Refresh the list of questions
     } else {
-      alert(`Failed to downvote: ${response.message}`);
+      toast.error(`Failed to downvote: ${response.message}`);
     }
   };
 
@@ -137,7 +177,7 @@ const Forums = () => {
                 <div className="space-y-2">
                   <h4 className="text-lg font-medium text-gray-900">{question.question}</h4>
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Posted By:</span> {question.posted_by}
+                    <span className="font-semibold">Posted By:</span> {userMap[question.posted_by] || 'Loading...'}
                   </p>
                   <p className="text-sm text-gray-600">
                     <span className="font-semibold">Date:</span> {new Date(question.date).toLocaleString()}
