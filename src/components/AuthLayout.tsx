@@ -25,7 +25,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                   </svg>
                 </div>
-                <p className="text-sm">Connect with alumni from your school</p>
+                <p className="text-sm">Connect with alumni from your University</p>
               </div>
               <div className="flex items-start">
                 <div className="rounded-full bg-white/20 p-2 mr-3">
