@@ -30,6 +30,7 @@ const menuItems: MenuItem[] = [
   { icon: MessageSquare, label: 'Forums', path: '/forums' },
   { icon: Briefcase, label: 'Opportunities', path: '/oppertunities' },
   { icon: User, label: 'Profile', path: '/profile' },
+  { icon: User, label: 'Video Chat', path: '/videochat' },
 ];
 
 export function SidebarNew() {
