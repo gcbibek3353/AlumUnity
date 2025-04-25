@@ -8,7 +8,6 @@ const Profile = () => {
   // const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with actual user ID once auth is implemented
   const {loggedInUser} = useFirebase();
   const userId = loggedInUser?.uid || ''; // Get the user ID from the logged-in user
-  console.log(userId);
 
   const [formData, setFormData] = useState({
     name: '',

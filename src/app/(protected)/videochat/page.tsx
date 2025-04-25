@@ -10,43 +10,48 @@ import {
   StreamVideoClient,
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
-
-// NOTE: This will generate a new call on every reload
-// Fork this CodeSandbox and set your own CallID if
-// you want to test with multiple users or multiple tabs opened
-const callId = "csb-" + "randon-call-id";
-// const callId = "csb-" + Math.random().toString(16).substring(2);
-const callType = "default";
-const user_id = "csb-user-" + Math.random().toString(16).substring(2);
-const user = { id: user_id, name: "CodeSandbox User" };
-
-const apiKey = "mmhfdzb5evj2";
-const tokenProvider = async () => {
-  const { token } = await fetch(
-    "https://pronto.getstream.io/api/auth/create-token?" +
-      new URLSearchParams({
-        api_key: apiKey,
-        user_id: user_id,
-      })
-  ).then((res) => res.json());
-  return token as string;
-};
+import { useFirebase } from "@/firebase/firebase.config";
 
 export default function VideoChat() {
   const [client, setClient] = useState<StreamVideoClient>();
   const [call, setCall] = useState<Call>();
+  const {loggedInUser} = useFirebase();
+
+  const callId = "csb-" + "randon-call-id";
+  const callType = "default";
+
+  // Ensure user_id is only set when loggedInUser is available
+  const user_id = loggedInUser?.uid || "";
+  const user = { id: user_id, name: loggedInUser?.displayName || "random-name" };
+
+  const apiKey = "mmhfdzb5evj2";
+  const tokenProvider = async () => {
+    const { token } = await fetch(
+      "https://pronto.getstream.io/api/auth/create-token?" +
+      new URLSearchParams({
+        api_key: apiKey,
+        user_id: user_id,
+      })
+    ).then((res) => res.json());
+    return token as string;
+  };
 
   useEffect(() => {
+    if (!loggedInUser) return; // Ensure loggedInUser is available before initializing the client
+    console.log(loggedInUser.uid)
+
     const myClient = new StreamVideoClient({ apiKey, user, tokenProvider });
     setClient(myClient);
+
     return () => {
       myClient.disconnectUser();
       setClient(undefined);
     };
-  }, []);
+  }, [loggedInUser]); // Add loggedInUser as a dependency
 
   useEffect(() => {
     if (!client) return;
+
     const myCall = client.call(callType, callId);
     myCall.join({ create: true }).catch((err) => {
       console.error(`Failed to join the call`, err);
