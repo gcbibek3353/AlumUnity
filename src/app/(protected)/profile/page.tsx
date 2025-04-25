@@ -2,9 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { updateUserInfo, getUserInfo } from '@/firebase/user.controller';
 import { toast } from 'sonner';
+import { useFirebase } from '@/firebase/firebase.config';
 
 const Profile = () => {
-  const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with actual user ID once auth is implemented
+  // const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with actual user ID once auth is implemented
+  const {loggedInUser} = useFirebase();
+  const userId = loggedInUser?.uid || ''; // Get the user ID from the logged-in user
+  console.log(userId);
 
   const [formData, setFormData] = useState({
     name: '',

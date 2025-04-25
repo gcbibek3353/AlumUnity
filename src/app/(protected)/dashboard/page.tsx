@@ -6,9 +6,11 @@ import { getThreeQuestionsWithMostUpvotes } from '@/firebase/questions.controlle
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Role } from '@/interfaces/user.interface';
+import { useFirebase } from '@/firebase/firebase.config';
 
 const Dashboard = () => {
-  const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with userId from context once auth is implemented
+  const { loggedInUser } = useFirebase();
+    const userId = loggedInUser?.uid || '';
 
   const [userInfo, setUserInfo] = useState<UserData | null>(null);
   const [events, setEvents] = useState([]);

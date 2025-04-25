@@ -15,9 +15,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createQuestion, getAllQuestions, createOrremoveUpvoteForQuestions, createOrremoveDownvoteForQuestions } from '@/firebase/questions.controller';
 import { getUserInfo } from '@/firebase/user.controller';
+import { useFirebase } from '@/firebase/firebase.config';
 
 const Forums = () => {
-  const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with userId from context once auth is implemented
+  const { loggedInUser } = useFirebase();
+  const userId = loggedInUser?.uid || '';
   const [userMap, setUserMap] = useState<{ [userId: string]: string }>({});
 
 
@@ -50,7 +52,7 @@ const Forums = () => {
     }
   };
 
-  
+
   //  const fetchQuestions = async () => {
   //   const response = await getAllQuestions();
   //   if (response.success) {
@@ -61,13 +63,13 @@ const Forums = () => {
   // };
   const fetchQuestions = async () => {
     const response = await getAllQuestions();
-  
+
     if (response.success) {
       const fetchedQuestions = response.questions;
-  
+
       // Extract unique userIds
       const userIds = [...new Set(fetchedQuestions.map((q: any) => q.posted_by))];
-  
+
       // Fetch user info if not already cached
       const userFetches = await Promise.all(userIds.map(async (id) => {
         if (!userMap[id]) {
@@ -79,20 +81,20 @@ const Forums = () => {
           return { id, name: userMap[id] }; // Already cached
         }
       }));
-  
+
       // Update userMap with new names
       const updatedUserMap = { ...userMap };
       userFetches.forEach(({ id, name }) => {
         updatedUserMap[id] = name;
       });
-  
+
       setUserMap(updatedUserMap);
       setQuestions(fetchedQuestions);
     } else {
       toast.error(`Failed to fetch questions: ${response.message}`);
     }
   };
-  
+
 
 
   const handleUpvote = async (questionId: string) => {

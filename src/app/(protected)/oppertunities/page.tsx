@@ -15,9 +15,11 @@ import { Label } from "@/components/ui/label";
 import { createOpportunity, getAllOpportunities } from "@/firebase/oppertunities.controller";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useFirebase } from "@/firebase/firebase.config";
 
 const Opportunities = () => {
-  const userId = "imgInmRjc0noGAw5CFBa"; // TODO: Replace with userId from context once auth is implemented
+  const {loggedInUser} = useFirebase();
+    const userId = loggedInUser?.uid || '';
 
   // TODO : Add the feature to filter oppertunities based on type, location, and salary
 
