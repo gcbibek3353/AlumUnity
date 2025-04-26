@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Role } from '@/interfaces/user.interface';
 import { useFirebase } from '@/firebase/firebase.config';
+import { toast } from 'sonner';
 
 const Dashboard = () => {
   const { loggedInUser } = useFirebase();
@@ -15,6 +16,7 @@ const Dashboard = () => {
   const [userInfo, setUserInfo] = useState<UserData | null>(null);
   const [events, setEvents] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [userMap, setUserMap] = useState<{ [userId: string]: string }>({});
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -33,8 +35,37 @@ const Dashboard = () => {
 
     const fetchQuestions = async () => {
       const response = await getThreeQuestionsWithMostUpvotes();
+      // if (response.success) {
+      //   setQuestions(response.questions);
+      // }
       if (response.success) {
-        setQuestions(response.questions);
+        const fetchedQuestions = response.questions;
+  
+        // Extract unique userIds
+        const userIds = [...new Set(fetchedQuestions.map((q: any) => q.posted_by))];
+  
+        // Fetch user info if not already cached
+        const userFetches = await Promise.all(userIds.map(async (id) => {
+          if (!userMap[id]) {
+            const user = await getUserInfo(id);
+            // console.log(user)
+            // console.log(user?.data?.name)
+            return { id, name: user?.data?.name || 'Unknown User' };
+          } else {
+            return { id, name: userMap[id] }; // Already cached
+          }
+        }));
+  
+        // Update userMap with new names
+        const updatedUserMap = { ...userMap };
+        userFetches.forEach(({ id, name }) => {
+          updatedUserMap[id] = name;
+        });
+  
+        setUserMap(updatedUserMap);
+        setQuestions(fetchedQuestions);
+      } else {
+        toast.error(`Failed to fetch questions: ${response.message}`);
       }
     };
 
@@ -233,7 +264,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-medium text-gray-900 mb-1">{question.question}</h3>
-                      <p className="text-sm text-gray-500">Posted by {question.posted_by}</p>
+                      <p className="text-sm text-gray-500">Posted by {userMap[question.posted_by] || 'Loading...'}</p>
                     </div>
                     {index === 0 && (
                       <span className="ml-auto px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
