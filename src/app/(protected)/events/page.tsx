@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { createEvent, getAllEvents } from '@/firebase/event.controller';
 import { toast } from 'sonner';
 import { useFirebase } from '@/firebase/firebase.config';
+import Link from 'next/link';
 
 const Events = () => {
   const { loggedInUser } = useFirebase();
@@ -185,9 +186,9 @@ const Events = () => {
                   {event.meet_link && (
                     <p className="text-sm text-gray-600">
                       <span className="font-semibold">Meet Link:</span>{' '}
-                      <a href={event.meet_link} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800">
+                      <Link href={event.meet_link} rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800">
                         Join Here
-                      </a>
+                      </Link>
                     </p>
                   )}
                   {event.location && (

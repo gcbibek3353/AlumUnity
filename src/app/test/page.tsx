@@ -21,8 +21,8 @@ const page = () => {
             // const res = await getUserInfo("KqLD11exKhcThd5juthP");
 
             // await createEvent({
-            //     title: "test event 2",
-            //     description: "this is a test event 2 ",
+            //     title: "Meet Event",
+            //     description: "this is a test event for google meet ",
             //     author : "KqLD11exKhcThd5juthP",
             //     date: "2023-10-10",
             //     meet_link: "https://meet.google.com/abc-defg-hij",
