@@ -11,13 +11,15 @@ import {
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { useFirebase } from "@/firebase/firebase.config";
+import { useParams } from "next/navigation";
 
 export default function VideoChat() {
   const [client, setClient] = useState<StreamVideoClient>();
   const [call, setCall] = useState<Call>();
   const {loggedInUser} = useFirebase();
+  const {callId} = useParams();
 
-  const callId = "csb-" + "randon-call-id";
+  // const callId = "csb-" + "randon-call-id";
   const callType = "default";
 
   // Ensure user_id is only set when loggedInUser is available

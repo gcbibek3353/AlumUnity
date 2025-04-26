@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/UserAvatar'
 import { createEvent, getAllEvents, getLatestThreeEvents } from '@/firebase/event.controller'
 import { createOpportunity, getAllOpportunities } from '@/firebase/oppertunities.controller'
-import { createOrremoveDownvoteForQuestions, createOrremoveDownvoteForReplies, createOrremoveUpvoteForQuestions, createOrremoveUpvoteForReplies, createQuestion, createReply, getAllQuestions, getThreeQuestionsWithMostUpvotes } from '@/firebase/questions.controller'
+import { createOrremoveDownvoteForQuestions, createOrremoveDownvoteForReplies, createOrremoveUpvoteForQuestions, createOrremoveUpvoteForReplies, createQuestion, createReply, getAllQuestions, getQuestionById, getThreeQuestionsWithMostUpvotes } from '@/firebase/questions.controller'
 import { getUserInfo, saveUserAfterLogin, updateUserInfo } from '@/firebase/user.controller'
 import React, { use, useEffect } from 'react'
 // this is just a temporary test file to test the controller functions 
@@ -50,12 +50,12 @@ const page = () => {
             //     date: "2023-10-10",
             // })
 
-            // await createReply({
-            //     question_id: "fovfILu6ukq69lFBw18P",
-            //     posted_by: "imgInmRjc0noGAw5CFBa",
-            //     reply: "this is a test reply",
-            //     date: "2023-10-10",
-            // })
+            await createReply({
+                question_id: "fovfILu6ukq69lFBw18P",
+                posted_by: "imgInmRjc0noGAw5CFBa",
+                reply: "this is a test reply1",
+                date: "2023-10-10",
+            })
 
             // await createOrremoveUpvoteForQuestions("fovfILu6ukq69lFBw18P", "imgInmRjc0noGAw5CFBa");
             // await createOrremoveDownvoteForQuestions("fovfILu6ukq69lFBw18P", "imgInmRjc0noGAw5CFBa");
@@ -64,9 +64,10 @@ const page = () => {
             // await createOrremoveDownvoteForReplies("WMWcwomwbrbBkoR5Fx5I", "imgInmRjc0noGAw5CFBa");
 
             // const res = await getAllQuestions();
-            const res = await getThreeQuestionsWithMostUpvotes();
+            // const res = await getThreeQuestionsWithMostUpvotes();
+            // const res = await getQuestionById("fovfILu6ukq69lFBw18P");
 
-            console.log(res.questions);
+            // console.log(res.question);
 
         }
         handler();

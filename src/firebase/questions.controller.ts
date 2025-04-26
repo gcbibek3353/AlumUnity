@@ -1,5 +1,6 @@
 import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { firebasedb } from "./firebase.config";
+import { getUserInfo } from './user.controller'; // Import getUserInfo to fetch user details
 
 export const createQuestion = async (question: CreateQuestionParams) => {
     try {
@@ -47,6 +48,69 @@ export const getAllQuestions = async () => {
         return {
             success: false,
             message: `Failed to fetch questions: ${error.message}`,
+        };
+    }
+}
+
+export const getQuestionById = async (questionId: string) => {
+    try {
+        // Reference to the specific question document in Firestore
+        const questionDocRef = doc(firebasedb, 'questions', questionId);
+
+        // Fetch the question document from Firestore
+        const questionSnapshot = await getDoc(questionDocRef);
+
+        if (!questionSnapshot.exists()) {
+            return {
+                success: false,
+                message: "Question not found",
+            };
+        }
+
+        const questionData = questionSnapshot.data();
+
+        // Fetch user info for the posted_by field
+        const userInfoResponse = await getUserInfo(questionData.posted_by);
+        const postedByUser = userInfoResponse.success ? userInfoResponse.data : { name: "Unknown User" };
+
+        // Fetch detailed replies
+        const replies = questionData.replies || [];
+        const populatedReplies = await Promise.all(
+            replies.map(async (replyId: string) => {
+                const replyDocRef = doc(firebasedb, 'replies', replyId);
+                const replySnapshot = await getDoc(replyDocRef);
+
+                if (replySnapshot.exists()) {
+                    const replyData = replySnapshot.data();
+                    const replyUserInfoResponse = await getUserInfo(replyData.posted_by);
+                    const replyPostedByUser = replyUserInfoResponse.success ? replyUserInfoResponse.data : { name: "Unknown User" };
+
+                    return {
+                        id: replyId,
+                        ...replyData,
+                        posted_by: replyPostedByUser, // Attach user info for the reply
+                    };
+                }
+                return null;
+            })
+        );
+
+        // Return success response with the populated question data
+        return {
+            success: true,
+            message: "Question fetched successfully",
+            question: {
+                id: questionSnapshot.id,
+                ...questionData,
+                posted_by: postedByUser, // Attach user info for the question
+                replies: populatedReplies.filter(reply => reply !== null), // Attach populated replies
+            },
+        };
+    } catch (error) {
+        // Handle errors and return failure response
+        return {
+            success: false,
+            message: `Failed to fetch question: ${error.message}`,
         };
     }
 }
