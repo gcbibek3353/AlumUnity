@@ -53,6 +53,7 @@ export function SidebarNew() {
     }
 
   }
+  console.log("the photo url is ",loggedInUser?.photoURL)
 
   return (
 
