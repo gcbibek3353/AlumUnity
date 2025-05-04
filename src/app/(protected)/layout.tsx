@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { SidebarNew } from '@/components/SideBarNew';
 import { useFirebase } from '@/firebase/firebase.config';
@@ -11,24 +11,26 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!isUserLoggedIn && !authloading) {
-      router.push('/sign-in');
+    // Redirect only after loading is complete and user is not logged in
+    if (!authloading && !isUserLoggedIn) {
+      router.replace('/sign-in');
     }
   }, [isUserLoggedIn, authloading, router]);
 
-  // Optional loading UI
-  // if (authloading) {
-  //   return <div className="flex items-center justify-center h-screen"><FaSpinner className="animate-spin text-xl" /></div>;
-  // }
+  // Prevent rendering until auth state is resolved
+  if (authloading || (!authloading && !isUserLoggedIn)) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="animate-spin text-xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar takes only its width */}
       <div className="shrink-0">
         <SidebarNew />
       </div>
-
-      {/* Main content takes the rest */}
       <main className="flex-1 p-4 overflow-auto bg-gray-50">
         {children}
       </main>
