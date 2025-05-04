@@ -64,7 +64,7 @@ export const FirebaseProvider = ({ children }: { children: React.ReactNode }) =>
       }
       setAuthloading(false);
     });
-  });
+  },[]);
 
   const signUpWithEmail = async (email: string, password: string) => {
     try {
