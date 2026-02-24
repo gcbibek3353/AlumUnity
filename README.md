@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AlumUnity
 
-## Getting Started
+Bringing students and alumni together in one seamless, interactive platform.
 
-First, run the development server:
+![Dashboard Screenshot](Screenshot from 2026-02-24 14-12-53.png)
+![Event / Meeting Demo](image.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Overview
+AlumUnity helps colleges and universities build stronger networks by connecting current students with alumni. The platform makes it easy to host live events, run discussions, share opportunities, and keep profiles up to date — all in a polished, user-friendly interface.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Key product capabilities
+- Single sign-on with Google and GitHub for secure, fast access.
+- Live video meetings integrated directly into the platform — host talks, panels, and Q&A sessions without leaving the site.
+- Events: alumni and student organizers can create events, share join links, and manage attendees.
+- Forums: post questions, answer, and vote; surface the most helpful conversations for the community.
+- Opportunities: alumni can post jobs and internships; students can browse and apply.
+- Profile & Dashboard: users see their profile, upcoming events, and top forum activity at a glance.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+How it works (simple)
+1. Sign in with Google or GitHub.
+2. Explore your dashboard to see your profile, upcoming events, and trending forum questions.
+3. Join live sessions directly inside the platform (no third-party tools required).
+4. Create or RSVP to events, participate in forum discussions, and apply to opportunities.
+5. Update your profile so your community sees your latest experience and availability.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Why organizations love AlumUnity
+- Engages alumni with minimal friction.
+- Provides a modern, all-in-one place for mentorship, hiring, and community events.
+- Reduces tool-switching by embedding live interaction directly in the product.
 
-## Learn More
+User-focused examples
+- A local alumni chapter hosts a panel — students join the live stream, ask questions, and network afterwards.
+- An alumnus posts an internship opening — students apply and follow up through the platform.
+- A student posts a technical question — top answers rise through voting and mentorship opportunities follow.
 
-To learn more about Next.js, take a look at the following resources:
+Getting started (for end users)
+- Create an account using Google or GitHub.
+- Complete your profile so alumni can find and connect with you.
+- Browse Events to discover upcoming sessions or create one if you’re hosting.
+- Use Forums to ask questions or help others.
+- Check Opportunities regularly and apply with your profile.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Support & feedback
+For questions, bug reports, or feedback, reach out to the project maintainers or your institution’s digital services contact. If you'd like to contribute or customize AlumUnity for your organization, contact the team to discuss partnership options.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Brand & license
+AlumUnity is designed as a polished, production-ready experience for academic communities. Check the repository for licensing and contribution details.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Thank you for building stronger student–alumni connections with AlumUnity.

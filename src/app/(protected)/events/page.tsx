@@ -56,13 +56,13 @@ const Events = () => {
       toast.error(`Failed to create event: ${response.message}`);
     }
   };
-   function ConfirmJoinLink({ meetLink }: { meetLink: string }) {
+  function ConfirmJoinLink({ meetLink }: { meetLink: string }) {
     const router = useRouter();
-  
+
     const handleConfirm = () => {
-      window.location.href=meetLink
+      window.location.href = meetLink
     };
-  
+
     return (
       <Dialog>
         <DialogTrigger asChild>
@@ -201,29 +201,44 @@ const Events = () => {
             {events.map((event: any) => (
               <li
                 key={event.id}
-                className="p-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200"
               >
-                <div className="space-y-2">
-                  <h4 className="text-lg font-medium text-gray-900">{event.title}</h4>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Description:</span> {event.description}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Date:</span> {new Date(event.date).toLocaleString()}
-                  </p>
-                  {event.meet_link && (
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Meet Link:</span>{' '}
-                      {/* <Link href={event.meet_link} rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800">
-                        Join Here
-                      </Link> */}
-                      <ConfirmJoinLink meetLink={event.meet_link} />
+                <div className="flex flex-col gap-4">
+
+                  {/* Top Section */}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900">
+                        {event.title}
+                      </h4>
+                      <p className="text-xs font-medium bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full inline-block mt-2">
+  {new Date(event.date).toLocaleString()}
+</p>
+                    </div>
+
+                    {event.meet_link && (
+                      <div className="flex-shrink-0">
+                        <ConfirmJoinLink meetLink={event.meet_link} />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t border-gray-100" />
+
+                  {/* Description */}
+                  {event.description && (
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {event.description}
                     </p>
                   )}
+
+                  {/* Location */}
                   {event.location && (
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Location:</span> {event.location}
-                    </p>
+                    <div className="text-sm text-gray-600">
+                      <span className="font-medium text-gray-700">Location:</span>{" "}
+                      {event.location}
+                    </div>
                   )}
                 </div>
               </li>

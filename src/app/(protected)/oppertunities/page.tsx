@@ -18,8 +18,8 @@ import { toast } from "sonner";
 import { useFirebase } from "@/firebase/firebase.config";
 
 const Opportunities = () => {
-  const {loggedInUser} = useFirebase();
-    const userId = loggedInUser?.uid || '';
+  const { loggedInUser } = useFirebase();
+  const userId = loggedInUser?.uid || '';
 
   // TODO : Add the feature to filter oppertunities based on type, location, and salary
 
@@ -205,24 +205,70 @@ const Opportunities = () => {
             {opportunities.map((opportunity: any) => (
               <li
                 key={opportunity.id}
-                className="p-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200"
               >
-                <div className="space-y-2">
-                  <h4 className="text-lg font-medium text-gray-900">{opportunity.title}</h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
-                    <p><span className="font-semibold">Company:</span> {opportunity.Company}</p>
-                    <p><span className="font-semibold">Type:</span> {opportunity.type}</p>
-                    <p><span className="font-semibold">Location:</span> {opportunity.location}</p>
-                    <p><span className="font-semibold">Salary:</span> {opportunity.salary}</p>
-                    <p><span className="font-semibold">Vacancy:</span> {opportunity.vacancy}</p>
+                <div className="flex flex-col gap-4">
+
+                  {/* Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900">
+                        {opportunity.title}
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {opportunity.Company}
+                      </p>
+                    </div>
+
+                    {opportunity.type && (
+                      <span className="text-xs font-medium bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full h-fit">
+                        {opportunity.type}
+                      </span>
+                    )}
                   </div>
-                  <Link
-                    href={opportunity.applicationLink}
-                    target="_blank"
-                    className="inline-block text-indigo-600 hover:text-indigo-800 font-medium"
-                  >
-                    Apply Here →
-                  </Link>
+
+                  {/* Divider */}
+                  <div className="border-t border-gray-100" />
+
+                  {/* Details Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-sm text-gray-600">
+
+                    {opportunity.location && (
+                      <div>
+                        <span className="font-medium text-gray-700">Location:</span>{" "}
+                        {opportunity.location}
+                      </div>
+                    )}
+
+                    {opportunity.salary && (
+                      <div>
+                        <span className="font-medium text-gray-700">Salary:</span>{" "}
+                        {opportunity.salary}
+                      </div>
+                    )}
+
+                    {opportunity.vacancy && (
+                      <div>
+                        <span className="font-medium text-gray-700">Vacancy:</span>{" "}
+                        {opportunity.vacancy}
+                      </div>
+                    )}
+
+                  </div>
+
+                  {/* Apply Button */}
+                  {opportunity.applicationLink && (
+                    <div className="pt-2">
+                      <Link
+                        href={opportunity.applicationLink}
+                        target="_blank"
+                        className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+                      >
+                        Apply Now →
+                      </Link>
+                    </div>
+                  )}
+
                 </div>
               </li>
             ))}

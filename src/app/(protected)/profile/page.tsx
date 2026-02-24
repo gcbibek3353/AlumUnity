@@ -87,6 +87,7 @@ const Profile = () => {
     };
 
     const response = await updateUserInfo(userId, userInfo);
+    
     if (response.success) {
       toast.success('User information updated successfully!');
     } else {
